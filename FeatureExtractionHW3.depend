@@ -1,0 +1,10 @@
+# depslib dependency file v1.0
+1553489433 source:g:\uncg_classes\csc522-digital_image_processing\homework3\featureextractionhw3\main.c
+	<stdio.h>
+	<stdlib.h>
+	<math.h>
+	<string.h>
+	"./main.h"
+
+1553482962 g:\uncg_classes\csc522-digital_image_processing\homework3\featureextractionhw3\main.h
+
