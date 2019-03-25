@@ -145,18 +145,52 @@ void distanceTransform(unsigned char** input, unsigned char** output, int dim_x,
             {
                 output[row][col] = 0;
             }
+        }
+    }
+}
 
-            //Just for displaying values.
-            if (output[row][col] > 9)
+void coOccurrenceMatrix(unsigned char ** in, unsigned char ** out, struct coordinate *off, int in_x, int in_y, int out_x, int out_y)
+{
+    int firstIntensity = 0;
+    int secondIntensity = 0;
+    int currX = off->x;
+    int currY = off->y;
+    int count = 1;          //Count occurrences of matching pair of intensities for i -> x  and j -> y.
+    int firstTime = TRUE;
+
+    for (int row = 0; row < out_y; row++)
+    {
+        for (int col = 0; col < out_x; col++)
+        {
+            firstIntensity = row;
+            secondIntensity = col;
+
+            //Iterate through the entire image for each intensity check of Matrix
+            for (int inRow = 0; inRow < in_y; inRow++)
             {
-                printf("%d ", output[row][col]);
+                for (int inCol = 0; inCol < in_x; inCol++)
+                {
+                    if (inRow + currY < in_y && inCol + currX < in_x)
+                    {
+                        if (in[inRow][inCol] == firstIntensity && in[inRow + currY][inCol + currX] == secondIntensity)
+                        {
+                            count++;
+                        }
+                    }
+                }
+            }
+            //Reached here means we've went one cycle of checks so store count for that pair of intensity levels.
+            if (count > 0)
+            {
+                //TODO: Fix this -- ask professor.
+                out[row][col] = 255 * ((float)count / (float)3);
             }
             else
             {
-                printf("%d  ", output[row][col]);
+                out[row][col] = 0;
             }
+            count = 0; //reset counter.
         }
-        printf("\n");
     }
 }
 
@@ -198,6 +232,20 @@ int main()
 
     //Copy results to file
     writeFile(square_output, sizeof(unsigned char), square_y, square_x, square_out_fp);
+
+    //Set up offset operator
+    struct coordinate offset;
+    offset.x = 1;
+    offset.y = 0;
+
+    //Set up for co-occurrence matrix
+    readFromFile(cktboard_in_fp, cktboard_input, cktboard_x, cktboard_y);
+
+    //Do co-occurrence operation... Oh yeah! Sorry, just jamming out to music right now.
+    coOccurrenceMatrix(cktboard_input, cktboard_output, &offset, cktboard_x, cktboard_y, cktboard_out_x, cktboard_out_y);
+
+    //Write results into file for co-occurrence matrix
+    writeFile(cktboard_output, sizeof(unsigned char), cktboard_out_y, cktboard_out_x, cktboard_out_fp);
 
     //free 2D array pointers from memory
     free2DArray(square_input, square_y);
