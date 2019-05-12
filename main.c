@@ -241,7 +241,7 @@ int main()
     //Set up for co-occurrence matrix
     readFromFile(cktboard_in_fp, cktboard_input, cktboard_x, cktboard_y);
 
-    //Do co-occurrence operation... Oh yeah! Sorry, just jamming out to music right now.
+    //Do co-occurrence operation.
     coOccurrenceMatrix(cktboard_input, cktboard_output, &offset, cktboard_x, cktboard_y, cktboard_out_x, cktboard_out_y);
 
     //Write results into file for co-occurrence matrix
